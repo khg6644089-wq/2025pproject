@@ -31,3 +31,15 @@ jobs:
 
       - name: Docker 이미지 푸시
         run: docker push ${{ steps.login-ecr.outputs.registry }}/p-project:latest
+
+      - name: EC2에 배포
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ubuntu
+          key: ${{ secrets.EC2_PRIVATE_KEY }}
+          script: |
+            sudo docker pull ${{ steps.login-ecr.outputs.registry }}/p-project:latest || true
+            sudo docker stop p-project || true
+            sudo docker rm p-project || true
+            sudo docker run -d --name p-project -p 8000:8000 ${{ steps.login-ecr.outputs.registry }}/p-project:latest
