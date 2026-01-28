@@ -106,7 +106,7 @@ def replace_score(name: str, payload: ScoreBase):
 
     # 이름 변경 허용(단, 충돌 방지)
     if payload.name != name and _find_index_by_name(payload.name) != -1:
-        raise HTTPException(status_code=409, detail="변경하려는 이름이 이미 존재합니다.")
+        raise HTTPException(status_code=409, detail="변경하려는 이름이 이미 존재합니다!")
 
     score[idx] = [payload.name, payload.korean, payload.english, payload.math, payload.science]
     return _row_to_out(score[idx])
